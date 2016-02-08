@@ -15,15 +15,15 @@ namespace Scripts
 
         void Start()
         {
-            initPositions();
-            removeCollidingPositions();
-            addFields();
-            batchFields();
-            initGameField();
+            InitPositions();
+            RemoveCollidingPositions();
+            AddFields();
+            BatchFields();
+            InitGameField();
             redField = (GameObject)Instantiate(Resources.Load("Prefabs/selectedField"));
         }
 
-        private void initPositions()
+        private void InitPositions()
         {
             int size = (int)gameObject.GetComponent<MeshRenderer>().bounds.size.x;
             for (int x = 0; x < size; x++)
@@ -35,12 +35,12 @@ namespace Scripts
             }
         }
 
-        private void removeCollidingPositions()
+        private void RemoveCollidingPositions()
         {
-            positions.RemoveAll(pos => isRaycast(pos + new Vector3(0, -.3f, 0)));
+            positions.RemoveAll(pos => IsRaycast(pos + new Vector3(0, -.3f, 0)));
         }
 
-        private bool isRaycast(Vector3 pos)
+        private bool IsRaycast(Vector3 pos)
         {
             Ray[] rays = new Ray[9];
             rays[0] = new Ray(pos + new Vector3(-0.5f, 0, 0.5f), Vector3.up);
@@ -65,7 +65,7 @@ namespace Scripts
             return false;
         }
 
-        private void addFields()
+        private void AddFields()
         {
             foreach (Vector3 pos in positions)
             {
@@ -75,13 +75,13 @@ namespace Scripts
             }
         }
 
-        private void initGameField()
+        private void InitGameField()
         {
             gameField = new GameField();
             positions.ForEach(v => gameField.AddField(ConvertTo2D(v)));
         }
 
-        private void batchFields()
+        private void BatchFields()
         {
             BatchUtility.BatchQuads(fields, 1024);
         }
@@ -116,7 +116,7 @@ namespace Scripts
             x += 0.5f;
             float z = Mathf.Floor(pos.z);
             z += 0.5f;
-            return new Vector3(x, 0.1f, z);
+            return new Vector3(x, 0.01f, z);
         }
 
         private Vector2 ConvertTo2D(Vector3 vec)

@@ -14,7 +14,7 @@ namespace Scripts
         void Start()
         {
             transform.position = new Vector3(0, height, 0);
-            transform.Rotate(new Vector3(angle, 0, 0));
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.right);
         }
 
         // Update is called once per frame
@@ -26,6 +26,12 @@ namespace Scripts
             delta /= 50;
             delta *= speed;
             transform.position += delta;
+        }
+
+        void OnValidate()
+        {
+            transform.position = new Vector3(transform.position.x, height, transform.position.z);
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.right);
         }
     }
 }
