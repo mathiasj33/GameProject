@@ -3,41 +3,55 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameLogic;
+using Utils;
 
 namespace Scripts
 {
     public class GameFieldControl : MonoBehaviour
     {
-        private List<Vector3> positions = new List<Vector3>();
+        private float boundSize;
+        public int size;
+        private float squareLength;
+        private TwoWayDictionary<Vector3, Vector2> positions = new TwoWayDictionary<Vector3, Vector2>();
         private List<GameObject> fields = new List<GameObject>();
         private GameField gameField;
-        private GameObject redField;
 
         void Start()
         {
+            boundSize = (int)gameObject.GetComponent<MeshRenderer>().bounds.size.x;
+            squareLength = boundSize / size;
+            InitGameField();
             InitPositions();
             RemoveCollidingPositions();
             AddFields();
             BatchFields();
-            InitGameField();
-            redField = (GameObject)Instantiate(Resources.Load("Prefabs/selectedField"));
         }
 
         private void InitPositions()
         {
-            int size = (int)gameObject.GetComponent<MeshRenderer>().bounds.size.x;
-            for (int x = 0; x < size; x++)
+            for (int i = 0; i < size; i++)
             {
-                for (int z = 0; z < size; z++)
+                for (int j = 0; j < size; j++)
                 {
-                    positions.Add(new Vector3(x - size / 2 + 0.5f, 0.05f, z - size / 2 + 0.5f));
+                    float x = squareLength * i;
+                    float z = squareLength * j;
+                    positions.Add(new Vector3(x - boundSize / 2 + squareLength / 2, 0.01f, z - boundSize / 2 + squareLength / 2),
+                        new Vector2(i, j));
                 }
             }
         }
 
         private void RemoveCollidingPositions()
         {
-            positions.RemoveAll(pos => IsRaycast(pos + new Vector3(0, -.3f, 0)));
+            for(int i = positions.Count - 1; i >= 0; i--)
+            {
+                Vector3 pos = positions.GetKeyAt(i);
+                if(IsRaycast(pos + new Vector3(0, -.3f, 0)))
+                {
+                    gameField.RemoveField(positions.GetValueAt(i));
+                    positions.RemoveKeyAndValue(pos);
+                }
+            }
         }
 
         private bool IsRaycast(Vector3 pos)
@@ -67,18 +81,18 @@ namespace Scripts
 
         private void AddFields()
         {
-            foreach (Vector3 pos in positions)
+            foreach (Vector3 pos in positions.Keys)
             {
                 GameObject field = (GameObject)Instantiate(Resources.Load("Prefabs/field"));
                 field.transform.position = pos;
+                field.transform.localScale = new Vector3(squareLength, squareLength, 1);
                 fields.Add(field);
             }
         }
 
         private void InitGameField()
         {
-            gameField = new GameField();
-            positions.ForEach(v => gameField.AddField(ConvertTo2D(v)));
+            gameField = new GameField(size);
         }
 
         private void BatchFields()
@@ -88,40 +102,54 @@ namespace Scripts
 
         void Update()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit result;
-            if (Physics.Raycast(ray, out result))
+            if (Input.GetMouseButtonDown(0))
             {
-                MarkRed(result.point);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit result;
+                if (Physics.Raycast(ray, out result))
+                {
+                    Vector2 target = ConvertToFieldPosition(result.point);
+                    List<Vector2> path = gameField.FindPath(new Vector2(0, 0), target);
+                    path.ForEach(MarkRed);
+                }
             }
         }
 
-        private void MarkRed(Vector3 pos)
+        private void MarkRed(Vector2 pos)
         {
-            Vector3 fieldPos = ConvertToFieldPosition(pos);
-            if (gameField.ContainsField(ConvertTo2D(fieldPos)))
-            {
-                redField.transform.position = fieldPos;
-                redField.SetActive(true);
-            }
-            else
-            {
-                redField.SetActive(false);
-            }
+            GameObject redField = (GameObject)Instantiate(Resources.Load("Prefabs/selectedField"));
+            Vector3 fieldPos = ConvertToWorldPosition(pos);
+            redField.transform.position = fieldPos;
+            redField.transform.localScale = new Vector3(squareLength, squareLength, 0);
+            redField.SetActive(true);
         }
 
-        private Vector3 ConvertToFieldPosition(Vector3 pos)
+        private Vector2 ConvertToFieldPosition(Vector3 pos)
         {
-            float x = Mathf.Floor(pos.x);
-            x += 0.5f;
-            float z = Mathf.Floor(pos.z);
-            z += 0.5f;
-            return new Vector3(x, 0.01f, z);
+            float x = pos.x - pos.x % squareLength;
+            if(x > 0) x += squareLength / 2;
+            else x -= squareLength / 2;
+            float z = pos.z -  pos.z % squareLength;
+            if(z > 0) z += squareLength / 2;
+            else z -= squareLength / 2;
+            Vector3 newPos = new Vector3(x, 0.01f, z);
+            
+            return positions.GetValue(newPos);
+        }
+
+        private Vector3 ConvertToWorldPosition(Vector2 pos)
+        {
+            return positions.GetKey(pos);
         }
 
         private Vector2 ConvertTo2D(Vector3 vec)
         {
             return new Vector2(vec.x, vec.z);
+        }
+
+        private Vector3 ConvertTo3D(Vector2 vec)
+        {
+            return new Vector3(vec.x, 0.01f, vec.y);
         }
     }
 }

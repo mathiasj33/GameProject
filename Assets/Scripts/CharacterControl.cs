@@ -14,9 +14,7 @@ namespace Scripts
         // Update is called once per frame
         void Update()
         {
-            CharacterController controller = GetComponent<CharacterController>();
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            controller.SimpleMove(forward * .5f);
+            
         }
     }
 }

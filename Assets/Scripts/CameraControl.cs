@@ -13,7 +13,7 @@ namespace Scripts
         // Use this for initialization
         void Start()
         {
-            transform.position = new Vector3(0, height, 0);
+            transform.position = new Vector3(transform.position.x, height, transform.position.z);
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.right);
         }
 

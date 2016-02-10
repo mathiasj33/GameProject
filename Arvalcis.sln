@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvalcis.CSharp.Plugins", "Arvalcis.CSharp.Plugins.csproj", "{0FF52246-388A-92FA-0E53-94BEA9E70B21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvalcis.CSharp", "Arvalcis.CSharp.csproj", "{553A8D87-D9F8-7447-1D04-FA0094387690}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvalcis.CSharp.Editor", "Arvalcis.CSharp.Editor.csproj", "{27F899B0-B138-A8A6-1BE3-0805D831FF49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FF52246-388A-92FA-0E53-94BEA9E70B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF52246-388A-92FA-0E53-94BEA9E70B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF52246-388A-92FA-0E53-94BEA9E70B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF52246-388A-92FA-0E53-94BEA9E70B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{553A8D87-D9F8-7447-1D04-FA0094387690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{553A8D87-D9F8-7447-1D04-FA0094387690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{553A8D87-D9F8-7447-1D04-FA0094387690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{553A8D87-D9F8-7447-1D04-FA0094387690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F899B0-B138-A8A6-1BE3-0805D831FF49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F899B0-B138-A8A6-1BE3-0805D831FF49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F899B0-B138-A8A6-1BE3-0805D831FF49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F899B0-B138-A8A6-1BE3-0805D831FF49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
