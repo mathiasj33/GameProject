@@ -1,2 +1,2 @@
 # Arvalcis
-This was a toy game project that I creates with Unity.
+This was a toy game project that I created with Unity.
